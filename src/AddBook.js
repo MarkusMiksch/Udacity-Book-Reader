@@ -11,6 +11,9 @@ class AddBook extends Component {
     foundBooks: []
   }
 
+  // this function gets called when the search-query changes
+  // it gets the books from the DB and saves them in the state,
+  // which causes a re-render
   findBooks = (query) => BooksAPI.search(query)
     .then((books) => {
       if (books && books.length > 0) {

@@ -8,9 +8,13 @@ class ListBooks extends Component {
     read: []
   }
 
+  // this function lists all the books that are provided in the props
   render() {
     let { books, booksCurrentlyReading, booksWantToRead, booksRead } = this.props
   
+    // every book needs the real shelf-value
+    // so every shelf is checked, if there is a book with the same ID in it
+    // if there is, the book gets the same shelf-value
     this.props.books.map(book => {
       if (!book.shelf){
         book.shelf = "none"}
@@ -31,10 +35,9 @@ class ListBooks extends Component {
       })
     })
 
-      // console.log(this.props.booksCurrentlyReading)
-      // console.log(this.props.booksWantToRead)
-      // console.log(this.props.booksRead)
-
+    // an "ol" is returned with a "li" for every single book
+    // the ID of the "li" is the ID of the book
+    // sometimes a book has no thumbnail -> if so, the background is a grey field
     return ( 
       <ol className="books-grid">
         {books.map((book) => (
