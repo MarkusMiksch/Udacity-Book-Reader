@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class ListBooks extends Component {
-  state = {
-    booksInShelves: [],
-    currentlyReading: [],
-    wantToRead: [],
-    read: []
-  }
 
   // this function lists all the books that are provided in the props
   render() {
