@@ -30,36 +30,37 @@ class BooksApp extends Component {
     })
   }
 
-  // delete a book from all shelfes
-  deleteFromShelfs(book){
-    this.setState((prevState) => {
-        booksInShelves: prevState.booksInShelves.filter((books) => books.id !== book.id)
-    })
-  }
-
-  // changes the shelf of a book -> gets called by a change in the books
-  // "drop-down" menu
-  //
-  // -> there is a small ERROR:
-  //    for a short time there are 2 children with the same key in the "ol"-list
-  //    this is because the page gets re-rendered 2 times (when book is deletet 
-  //    and when book is added)
-  //    this could be solved by rendering only 1 times, but the user-experience
-  //    gets hurt, becuase then it takes the book a long time to switch its position
+  // changes the shelf of a book -> gets called by a change in the books "drop-down" menu
   change = (event, book) => {
     let shelf = event.target.value
-    // first set shelf to "none"
-    BooksAPI.update(book, shelf)
-      // then delete it from the shelfs
-      .then(this.deleteFromShelfs(book))
-      // then add it to the new shelf, if not "none" is chosen
+    
+      BooksAPI.update(book, shelf)
       .then(() => {
-        if (shelf !== "none") {this.addToShelf(book)} 
+        // if book is already on a shelf:
+        if (book.shelf !== "none") {
+          // remove it from the shelfs - in the state -> so it re-renders
+          if (shelf === "none") {
+            let booksInShelvesNew = this.state.booksInShelves.filter((books) => books.id !== book.id)
+            this.setState({ booksInShelves: booksInShelvesNew })
+          } 
+          // change the shelf and update the state -> re-render
+          else {
+            let booksInShelvesNew = this.state.booksInShelves.filter((books) => books.id !== book.id)
+            book.shelf = shelf
+            booksInShelvesNew.push(book)
+            this.setState({booksInShelves: booksInShelvesNew})
+          }
+        }
+        // if book is not already on a shelf
+        else {
+          book.shelf = shelf
+          this.addToShelf(book)
+        }
       })
       .catch(function(err){
         console.log(err) 
       })
-    book.shelf = shelf
+    
   }
 
   render() {
